@@ -490,7 +490,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.3.7"
+    version: "0.3.8"
   typed_data:
     dependency: transitive
     description:
