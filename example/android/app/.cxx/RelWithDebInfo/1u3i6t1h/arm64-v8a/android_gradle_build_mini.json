@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "E:\\Flutter_SDK\\3.29.3\\flutter\\packages\\flutter_tools\\gradle\\src\\main\\groovy\\CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "E:\\Android_SDK\\cmake\\3.22.1\\bin\\ninja.exe",
+      "-C",
+      "E:\\Projects\\Flutter Package\\twilio_conversation_sdk\\example\\android\\app\\.cxx\\RelWithDebInfo\\1u3i6t1h\\arm64-v8a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "E:\\Android_SDK\\cmake\\3.22.1\\bin\\ninja.exe",
+    "-C",
+    "E:\\Projects\\Flutter Package\\twilio_conversation_sdk\\example\\android\\app\\.cxx\\RelWithDebInfo\\1u3i6t1h\\arm64-v8a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}
