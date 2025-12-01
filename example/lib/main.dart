@@ -4,12 +4,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:mime/mime.dart';
 import 'package:twilio_conversation_sdk/twilio_conversation_sdk.dart';
 import 'package:twilio_conversation_sdk_example/conversation_list.dart';
 
 DateFormat get formatterYYYYMMddTHHMMss => DateFormat('yyyy-MM-ddTHH:mm:ss');
+
+DateFormat get formatterHHMMAA => DateFormat('yyyy-MM-dd hh:mm a');
 
 DateFormat get formatterYYYYMMddTHHMMssSSS =>
     DateFormat('yyyy-MM-ddTHH:mm:ss.SSS');
@@ -41,10 +42,11 @@ class _ConversationState extends State<Conversation> {
   static var accountSid = '';
   static var apiKey = '';
   static var apiSecret = '';
-  static var serviceSid = ''; // Conversation Service SID
+  static var serviceSid =
+      ''; // Default Conversation Service SID
+  static var pushSid = '';
   static var identity = '';
   static var participantIdentity = '';
-  static var pushSid = '';
   String? accessToken = "";
 
   final _twilioConversationSdkPlugin = TwilioConversationSdk();
@@ -394,27 +396,28 @@ class _ConversationState extends State<Conversation> {
                                   itemBuilder: (context, index) {
                                     List? attachMedia =
                                         messages[index]['attachMedia'] ?? [];
-                                    return /*InkWell(
-                                      onTap: () async {
-                                        await _twilioConversationSdkPlugin
-                                            .deleteMessage(
-                                                conversationId: conversationId,
-                                                index: index)
-                                            .then((result) async {
-                                          if (result == "Success") {
-                                            await getAllMessages();
-                                          }
-                                          print(result);
-                                        });
-                                      },
-                                      child:*/
-                                        getMessageView(
+                                    return InkWell(
+                                        onTap: () async {
+                                          await _twilioConversationSdkPlugin
+                                              .deleteMessageWithSid(
+                                                  conversationId:
+                                                      conversationId,
+                                                  messageSid: messages[index]
+                                                      ["sid"],
+                                                  messageCount: 1000)
+                                              .then((result) async {
+                                            if (result == "Success") {
+                                              await getAllMessages();
+                                            }
+                                            print(result);
+                                          });
+                                        },
+                                        child: getMessageView(
                                             messages[index]["attributes"],
                                             messages[index]["body"],
                                             messages[index]["author"],
                                             messages[index]["dateCreated"],
-                                            attachMedia);
-                                    //);
+                                            attachMedia));
                                   },
                                 ),
                               ),
@@ -511,14 +514,11 @@ class _ConversationState extends State<Conversation> {
 
   getMessageView(String attribute, String message, String author, String date,
       List<dynamic>? attachMedia) {
-    String localDate = convertUTCToLocalChat(
+    String timeAgo = convertUTCToLocalChat(
         utcDateTime: date,
         inputDateFormat: formatterYYYYMMddTHHMMss,
-        outputDateFormat: formatterYYYYMMddTHHMMssSSS);
+        outputDateFormat: formatterHHMMAA);
 
-    DateTime dateTime = formatterYYYYMMddTHHMMssSSS.parse(localDate);
-    String timeAgo;
-    timeAgo = Jiffy.parseFromDateTime(dateTime).fromNow();
     for (Map participant in participantList) {
       if (participant["friendlyIdentity"] == author) {
         authorName = participant["friendlyName"] != null &&

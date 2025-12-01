@@ -137,7 +137,7 @@ abstract class TwilioConversationSdkPlatform extends PlatformInterface {
   }
 
   Future<String?> deleteMessageWithSid(
-      {required String conversationId, required String messageSid}) {
+      {required String conversationId, required String messageSid, required int messageCount}) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 }

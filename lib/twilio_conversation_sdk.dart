@@ -276,9 +276,13 @@ class TwilioConversationSdk {
   ///
   /// Returns a [String] indicating the result of the operation, or `null` if it fails.
   Future<String?> deleteMessageWithSid(
-      {required String conversationId, required String messageSid}) {
+      {required String conversationId,
+      required String messageSid,
+      required int messageCount}) {
     return TwilioConversationSdkPlatform.instance.deleteMessageWithSid(
-        conversationId: conversationId, messageSid: messageSid);
+        conversationId: conversationId,
+        messageSid: messageSid,
+        messageCount: messageCount);
   }
 
   /// Subscribes to message update events for a specific conversation.

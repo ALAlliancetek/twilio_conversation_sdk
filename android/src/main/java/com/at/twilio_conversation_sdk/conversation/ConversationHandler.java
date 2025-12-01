@@ -828,12 +828,12 @@ public class ConversationHandler {
     }
 
 
-    public static void deleteMessageWithSid(String conversationId, String messageSid, MethodChannel.Result result) {
+    public static void deleteMessageWithSid(String conversationId, String messageSid, Integer messageCount, MethodChannel.Result result) {
         conversationClient.getConversation(conversationId, new CallbackListener<Conversation>() {
             @Override
             public void onSuccess(Conversation conversation) {
 
-                findMessageBySid(conversation, messageSid, new CallbackListener<Message>() {
+                findMessageBySid(conversation, messageSid, messageCount, new CallbackListener<Message>() {
                     @Override
                     public void onSuccess(Message message) {
                         conversation.removeMessage(message, new StatusListener() {
@@ -863,9 +863,9 @@ public class ConversationHandler {
         });
     }
 
-    private static void findMessageBySid(Conversation conversation, String messageSid,
+    private static void findMessageBySid(Conversation conversation, String messageSid, Integer messageCount,
                                          CallbackListener<Message> listener) {
-        conversation.getLastMessages(1, new CallbackListener<List<Message>>() {
+        conversation.getLastMessages(messageCount, new CallbackListener<List<Message>>() {
             @Override
             public void onSuccess(List<Message> messages) {
                 for (Message msg : messages) {

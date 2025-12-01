@@ -157,7 +157,7 @@ public class TwilioConversationSdkPlugin implements FlutterPlugin, MethodCallHan
                 ConversationHandler.deleteMessage(call.argument("conversationId"), call.argument("index"), result);
                 break;
             case Methods.deleteMessageWithSid:
-                ConversationHandler.deleteMessageWithSid(call.argument("conversationId"), call.argument("messageSid"), result);
+                ConversationHandler.deleteMessageWithSid(call.argument("conversationId"), call.argument("messageSid"), call.argument("messageCount"), result);
                 break;
             default:
                 break;
