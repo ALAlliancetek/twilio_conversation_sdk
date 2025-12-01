@@ -1,6 +1,6 @@
 name: twilio_conversation_sdk
 description: "Twilio Conversation SDK - A Flutter plugin which allows you to build engaging conversational messaging experiences for Android and iOS."
-version: 0.3.7
+version: 0.3.8
 homepage: "https://github.com/ALAlliancetek/twilio_conversation_sdk"
 
 environment:
