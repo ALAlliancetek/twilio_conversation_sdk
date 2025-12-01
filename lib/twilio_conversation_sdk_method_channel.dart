@@ -172,9 +172,10 @@ class MethodChannelTwilioConversationSdk extends TwilioConversationSdkPlatform {
 
   /// Get participants with name from the specific conversation #
   @override
-  Future<List?> getParticipantsWithName({required String conversationId}) async {
-    final List? participantsList = await methodChannel
-        .invokeMethod('getParticipantsWithName', {"conversationId": conversationId});
+  Future<List?> getParticipantsWithName(
+      {required String conversationId}) async {
+    final List? participantsList = await methodChannel.invokeMethod(
+        'getParticipantsWithName', {"conversationId": conversationId});
     return participantsList ?? [];
   }
 
@@ -237,8 +238,16 @@ class MethodChannelTwilioConversationSdk extends TwilioConversationSdkPlatform {
   Future<String?> deleteMessage(
       {required String conversationId, required int index}) async {
     final result = await methodChannel.invokeMethod<String>(
-        'deleteMessage',
-        {"conversationId": conversationId, "index": index});
+        'deleteMessage', {"conversationId": conversationId, "index": index});
+    return result;
+  }
+
+  /// delete message with sid #
+  @override
+  Future<String?> deleteMessageWithSid(
+      {required String conversationId, required String messageSid}) async {
+    final result = await methodChannel.invokeMethod<String>('deleteMessageWithSid',
+        {"conversationId": conversationId, "messageSid": messageSid});
     return result;
   }
 }

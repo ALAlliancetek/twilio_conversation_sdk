@@ -8,7 +8,6 @@ import com.at.twilio_conversation_sdk.app_interface.ClientInterface;
 import com.at.twilio_conversation_sdk.app_interface.MessageInterface;
 import com.at.twilio_conversation_sdk.conversation.ConversationHandler;
 import com.at.twilio_conversation_sdk.utility.Methods;
-import com.twilio.conversations.Conversation;
 
 import java.util.List;
 import java.util.Map;
@@ -156,6 +155,9 @@ public class TwilioConversationSdkPlugin implements FlutterPlugin, MethodCallHan
                 break;
             case Methods.deleteMessage:
                 ConversationHandler.deleteMessage(call.argument("conversationId"), call.argument("index"), result);
+                break;
+            case Methods.deleteMessageWithSid:
+                ConversationHandler.deleteMessageWithSid(call.argument("conversationId"), call.argument("messageSid"), result);
                 break;
             default:
                 break;

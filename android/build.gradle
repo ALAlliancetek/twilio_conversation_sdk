@@ -39,9 +39,9 @@ android {
 
     dependencies {
         testImplementation("junit:junit:4.13.2")
-        testImplementation("org.mockito:mockito-core:5.19.0")
+        testImplementation("org.mockito:mockito-core:5.20.0")
         implementation "com.twilio:conversations-android-with-symbols:6.2.0"
-        implementation "com.twilio.sdk:twilio:11.0.0-rc.4"
+        implementation "com.twilio.sdk:twilio:11.0.2"
     }
 
     testOptions {

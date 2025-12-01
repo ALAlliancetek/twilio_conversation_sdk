@@ -2,9 +2,6 @@ package com.at.twilio_conversation_sdk.conversation;
 
 import static org.apache.commons.io.FileUtils.openInputStream;
 
-import android.os.Handler;
-import android.os.Looper;
-
 import androidx.annotation.NonNull;
 
 import com.at.twilio_conversation_sdk.app_interface.AccessTokenInterface;
@@ -20,7 +17,6 @@ import com.twilio.conversations.ConversationsClientListener;
 import com.twilio.conversations.Media;
 import com.twilio.conversations.MediaUploadListener;
 import com.twilio.conversations.Message;
-import com.twilio.conversations.Messages;
 import com.twilio.conversations.Participant;
 import com.twilio.conversations.StatusListener;
 import com.twilio.conversations.User;
@@ -28,13 +24,9 @@ import com.twilio.jwt.accesstoken.AccessToken;
 import com.twilio.jwt.accesstoken.ChatGrant;
 import com.twilio.util.ErrorInfo;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,7 +39,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
@@ -222,6 +213,7 @@ public class ConversationHandler {
 
     /// Send message #
     public static void sendMessages(String enteredMessage, String conversationId, HashMap attribute, MethodChannel.Result result) {
+        System.out.println("sendMessages-> call from conversation handler");
         conversationClient.getConversation(conversationId, new CallbackListener<Conversation>() {
             @Override
             public void onSuccess(Conversation conversation) {
@@ -239,7 +231,7 @@ public class ConversationHandler {
 
                     @Override
                     public void onError(ErrorInfo errorInfo) {
-                        System.out.println("messageMap- onError");
+                        System.out.println("messageMap- onError:" + errorInfo);
                         result.success(errorInfo.getMessage());
                     }
                 });
@@ -247,6 +239,7 @@ public class ConversationHandler {
 
             @Override
             public void onError(ErrorInfo errorInfo) {
+                System.out.println("messageMap- CallbackListener onError:" + errorInfo);
                 CallbackListener.super.onError(errorInfo);
             }
         });
@@ -254,6 +247,7 @@ public class ConversationHandler {
 
     /// Send message #
     public static void sendMessageWithMedia(String enteredMessage, String conversationId, HashMap attribute, String mediaFilePath, String mimeType, String fileName, MethodChannel.Result result) {
+        System.out.println("sendMessageWithMedia-> call from conversation handler");
         // Fetch the conversation using the conversationId
         conversationClient.getConversation(conversationId, new CallbackListener<Conversation>() {
             @Override
@@ -832,6 +826,64 @@ public class ConversationHandler {
             }
         });
     }
+
+
+    public static void deleteMessageWithSid(String conversationId, String messageSid, MethodChannel.Result result) {
+        conversationClient.getConversation(conversationId, new CallbackListener<Conversation>() {
+            @Override
+            public void onSuccess(Conversation conversation) {
+
+                findMessageBySid(conversation, messageSid, new CallbackListener<Message>() {
+                    @Override
+                    public void onSuccess(Message message) {
+                        conversation.removeMessage(message, new StatusListener() {
+                            @Override
+                            public void onSuccess() {
+                                result.success("success");
+                            }
+
+                            @Override
+                            public void onError(ErrorInfo errorInfo) {
+                                result.error("delete_failed", errorInfo.getMessage(), null);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        result.error("msg_not_found", errorInfo.getMessage(), null);
+                    }
+                });
+            }
+
+            @Override
+            public void onError(ErrorInfo errorInfo) {
+                result.error("conv_failed", errorInfo.getMessage(), null);
+            }
+        });
+    }
+
+    private static void findMessageBySid(Conversation conversation, String messageSid,
+                                         CallbackListener<Message> listener) {
+        conversation.getLastMessages(1, new CallbackListener<List<Message>>() {
+            @Override
+            public void onSuccess(List<Message> messages) {
+                for (Message msg : messages) {
+                    if (msg.getSid().equals(messageSid)) {
+                        listener.onSuccess(msg);
+                        return;
+                    }
+                }
+                listener.onError(new ErrorInfo(-1, "Message SID not found"));
+            }
+
+            @Override
+            public void onError(ErrorInfo errorInfo) {
+                listener.onError(errorInfo);
+            }
+        });
+    }
+
 
     public static void initializeConversationClient(String accessToken, MethodChannel.Result result, ClientInterface clientInterface) {
         ConversationsClient.Properties props = ConversationsClient.Properties.newBuilder().createProperties();

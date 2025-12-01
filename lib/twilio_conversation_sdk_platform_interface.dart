@@ -7,7 +7,8 @@ abstract class TwilioConversationSdkPlatform extends PlatformInterface {
 
   static final Object _token = Object();
 
-  static TwilioConversationSdkPlatform _instance = MethodChannelTwilioConversationSdk();
+  static TwilioConversationSdkPlatform _instance =
+      MethodChannelTwilioConversationSdk();
 
   /// The default instance of [TwilioChatConversationPlatform] to use.
   ///
@@ -71,19 +72,20 @@ abstract class TwilioConversationSdkPlatform extends PlatformInterface {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
-  Future<String?> sendMessage({required String conversationId,
-    required String message,
-    required dynamic attribute}) {
+  Future<String?> sendMessage(
+      {required String conversationId,
+      required String message,
+      required dynamic attribute}) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
-  Future<String?> sendMessageWithMedia({
-    required String message,
-    required String conversationId,
-    required dynamic attribute,
-    required String mediaFilePath,
-    required String mimeType,
-    required String fileName}) {
+  Future<String?> sendMessageWithMedia(
+      {required String message,
+      required String conversationId,
+      required dynamic attribute,
+      required String mediaFilePath,
+      required String mimeType,
+      required String fileName}) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
@@ -125,12 +127,17 @@ abstract class TwilioConversationSdkPlatform extends PlatformInterface {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
-  Future<String?> deleteConversation(
-      {required String conversationId}) {
+  Future<String?> deleteConversation({required String conversationId}) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
+
   Future<String?> deleteMessage(
-      {required String conversationId,required int index}) {
+      {required String conversationId, required int index}) {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  Future<String?> deleteMessageWithSid(
+      {required String conversationId, required String messageSid}) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 }

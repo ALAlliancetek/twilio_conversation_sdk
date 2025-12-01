@@ -48,8 +48,10 @@ class _ConversationListState extends State<ConversationList> {
         if (lastMessage.isNotEmpty) {
           // Extract the message body from the fetched last message
           var messageBody = lastMessage[0]['lastMessage'] ?? 'No message';
-          var friendlyName = lastMessage[0]['friendlyName'] ??
-              'No friendlyName'; // Default if no body
+          var lastMessageDate =
+              lastMessage[0]['lastMessageDate'] ?? 'No lastMessageDate';
+          print("DevlastMessageDateFlutter--> $lastMessageDate");
+
           var friendlyIdentity = lastMessage[0]['friendlyIdentity'] ??
               'No friendlyIdentity'; // Default if no body
 
@@ -81,9 +83,26 @@ class _ConversationListState extends State<ConversationList> {
         }*/
       }
     }
+    sorting();
     isLoading = false;
 
     setState(() {});
+  }
+
+  sorting() {
+    conversationList.sort(
+      (conversationOld, conversationNew) {
+        var oldLastDate = conversationOld['lastMessageDate'] ?? "";
+        var newLastDate = conversationNew['lastMessageDate'] ?? "";
+        return oldLastDate == null && oldLastDate == ""
+            ? 1
+            : newLastDate == null && newLastDate == ""
+                ? -1
+                : -DateTime.parse(conversationOld['lastMessageDate'] ?? '')
+                    .compareTo(DateTime.parse(
+                        conversationNew['lastMessageDate'] ?? ''));
+      },
+    );
   }
 
   @override

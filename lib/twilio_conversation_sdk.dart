@@ -259,7 +259,7 @@ class TwilioConversationSdk {
         .deleteConversation(conversationId: conversationId);
   }
 
-  /// Delete conversation.
+  /// Delete message.
   ///
   /// This method delete conversation with the specified name and identity.
   ///
@@ -268,6 +268,17 @@ class TwilioConversationSdk {
       {required String conversationId, required int index}) {
     return TwilioConversationSdkPlatform.instance
         .deleteMessage(conversationId: conversationId, index: index);
+  }
+
+  /// Delete message with sid.
+  ///
+  /// This method delete conversation with the specified name and identity.
+  ///
+  /// Returns a [String] indicating the result of the operation, or `null` if it fails.
+  Future<String?> deleteMessageWithSid(
+      {required String conversationId, required String messageSid}) {
+    return TwilioConversationSdkPlatform.instance.deleteMessageWithSid(
+        conversationId: conversationId, messageSid: messageSid);
   }
 
   /// Subscribes to message update events for a specific conversation.
