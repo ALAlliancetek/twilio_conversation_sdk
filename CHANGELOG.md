@@ -1,4 +1,7 @@
-## 0.3.7
+## 0.3.9
+Delete Message from sId
+
+## 0.3.8
 Timezone issue resolved
 
 ## 0.3.7
