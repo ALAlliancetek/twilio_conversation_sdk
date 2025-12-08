@@ -161,12 +161,12 @@ public class TwilioConversationSdkPlugin: NSObject, FlutterPlugin,FlutterStreamH
                             if let jsonString = String(data: jsonData, encoding: .utf8) {
                                 print(jsonString)
                                 participant["attributes"] = jsonString
-
+                                
                             }
                         } catch {
                             print("Error converting dictionary to string: \(error.localizedDescription)")
                             participant["attributes"] = ""
-
+                            
                         }
                         listOfParticipants.append(participant)
                     }
@@ -176,16 +176,16 @@ public class TwilioConversationSdkPlugin: NSObject, FlutterPlugin,FlutterStreamH
             break
         case Methods.getParticipantsWithName:
             var listOfParticipants: [[String: Any]] = []
-
+            
             // Fetch participants for the provided conversation ID
             self.conversationsHandler.getParticipants(conversationId: arguments?["conversationId"] as! String) { participantsList in
                 // Create a DispatchGroup to track asynchronous tasks
                 let dispatchGroup = DispatchGroup()
-
+                
                 // Loop through each participant in the fetched list
                 for user in participantsList {
                     var participant: [String: Any] = [:]
-
+                    
                     // Ensure identity is not nil or empty
                     if !ConvertorUtility.isNilOrEmpty(user.identity) {
                         participant["identity"] = user.identity
@@ -208,7 +208,7 @@ public class TwilioConversationSdkPlugin: NSObject, FlutterPlugin,FlutterStreamH
                         }
                         // Enter the DispatchGroup before making the async call
                         dispatchGroup.enter()
-
+                        
                         // Call the subscribedUser method asynchronously
                         user.subscribedUser { result, users in
                             // Update participant data with the user details
@@ -222,17 +222,17 @@ public class TwilioConversationSdkPlugin: NSObject, FlutterPlugin,FlutterStreamH
                         }
                     }
                 }
-
+                
                 // Once all async tasks are finished, notify and return the result
                 dispatchGroup.notify(queue: .main) {
                     result(listOfParticipants)  // Return the list of participants once everything is done
                 }
             }
             break
-
-
             
- 
+            
+            
+            
         case Methods.addParticipant:
             self.conversationsHandler.addParticipants(conversationId: arguments?["conversationId"] as! String, participantName: arguments?["participantName"] as! String) { status in
                 if let addParticipantStatus = status {
@@ -309,15 +309,15 @@ public class TwilioConversationSdkPlugin: NSObject, FlutterPlugin,FlutterStreamH
                     result(tchResult.resultText)
                 }
             }
-
-//            self.conversationsHandler.sendMessage(conversationId: arguments?["conversationId"] as! String, messageText: arguments?["message"] as! String,
-//                attributes: arguments?["attribute"] as! [String : Any]) { tchResult, tchMessages in
-//                if (tchResult.isSuccessful){
-//                    result("send")
-//                }else {
-//                    result(tchResult.resultText)
-//                }
-
+            
+            //            self.conversationsHandler.sendMessage(conversationId: arguments?["conversationId"] as! String, messageText: arguments?["message"] as! String,
+            //                attributes: arguments?["attribute"] as! [String : Any]) { tchResult, tchMessages in
+            //                if (tchResult.isSuccessful){
+            //                    result("send")
+            //                }else {
+            //                    result(tchResult.resultText)
+            //                }
+            
             break
         case Methods.subscribeToMessageUpdate:
             if let conversationId = arguments?["conversationId"] as? String {
@@ -339,30 +339,34 @@ public class TwilioConversationSdkPlugin: NSObject, FlutterPlugin,FlutterStreamH
             break
         case Methods.unSubscribeToMessageUpdate:
             self.conversationsHandler.getConversationFromId(conversationId: arguments?["conversationId"] as! String) { conversation in
-//                self.conversationsHandler.lastReadIndex = conversation?.lastMessageIndex
-//                conversation?.setLastReadMessageIndex(conversation?.lastMessageIndex ?? 0, completion: { result, index in
-//                    print("setLastReadMessageIndex \(result.description)")
-//                    self.conversationsHandler.lastReadIndex = nil
-//                })
             }
             self.conversationsHandler.conversationId = nil
             conversationsHandler.isSubscribe = nil
             conversationsHandler.messageDelegate = nil
-
+            break
+        case Methods.deleteConversation:
+            self.conversationsHandler.deleteConversation(conversationId: arguments?["conversationId"] as! String) { resultString in
+                result(resultString)
+            }
+            break
+        case Methods.deleteMessageWithSid:
+            self.conversationsHandler.deleteMessageWithSid(conversationId: arguments?["conversationId"] as! String,messageSid: arguments?["messageSid"] as! String,messageCount: arguments?["messageCount"] as! Int) { resultString in
+                result(resultString)
+            }
             break
         default:
             break
         }
     }
     
-
+    
 }
 
 extension TwilioConversationSdkPlugin : MessageDelegate {
     func onSynchronizationChanged(status: [String : Any]) {
         self.eventSink?(status)
     }
-
+    
     func onMessageUpdate(message: [String : Any], messageSubscriptionId: String) {
         if let conversationId = message["conversationId"] as? String,let message = message["message"] as? [String:Any] {
             if (messageSubscriptionId == conversationId) {
