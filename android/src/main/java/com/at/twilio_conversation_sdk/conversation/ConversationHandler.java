@@ -436,6 +436,12 @@ public class ConversationHandler {
                     @Override
                     public void onMessageDeleted(Message message) {
                         System.out.println("onMessageDeleted->" + message.getBody());
+                        Map<String, Object> messageMap = new HashMap<>();
+                        messageMap.put("sid", message.getSid());
+                        messageMap.put("author", message.getAuthor());
+                        messageMap.put("body", message.getBody());
+                        messageMap.put("isDelete", true);
+                        triggerEvent(messageMap);
                     }
 
                     @Override

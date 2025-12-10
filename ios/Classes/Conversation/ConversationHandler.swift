@@ -17,7 +17,19 @@ class ConversationsHandler: NSObject, TwilioConversationsClientDelegate {
     public var messageSubscriptionId: String = ""
     var tokenEventSink: FlutterEventSink?
 
+  func conversationsClient(_ client: TwilioConversationsClient, conversation: TCHConversation, messageDeleted message: TCHMessage) {
+        print("messageDeleted - \(message)");
+        var dictionary: [String: Any] = [:]
+        dictionary["sid"] = message.sid
+        dictionary["author"] = message.author
+        dictionary["body"] = message.body
+        dictionary["isDelete"] = true
+        var updatedMessage: [String: Any] = [:]
+        updatedMessage["conversationId"] = conversation.sid ?? ""
+        updatedMessage["message"] = dictionary
 
+        self.messageDelegate?.onMessageUpdate(message: updatedMessage, messageSubscriptionId: self.messageSubscriptionId)
+    }
 
     //    MARK: raw
     func conversationsClient(_ client: TwilioConversationsClient, conversation: TCHConversation,
