@@ -4,7 +4,7 @@ class Strings {
     
     /// Used when conversation is created successfully
     static let createConversationSuccess: String = "Conversation created successfully."
-
+    
     /// Used when there is an error while creating a conversation
     static let createConversationFailure: String = "Error while creating conversation."
     
@@ -31,4 +31,6 @@ class Strings {
     
     /// Used when twilio access token is refreshed
     static let accessTokenRefreshed: String = "Access token refreshed"
+    static let success: String = "Success"
+    static let failed: String = "Failed"
 }

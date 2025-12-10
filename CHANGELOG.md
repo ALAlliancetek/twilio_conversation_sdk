@@ -1,4 +1,7 @@
-## 0.3.9
+## 0.4.1
+Delete Message from sId for iOS
+
+## 0.4.0
 Delete Message from sId
 
 ## 0.3.8

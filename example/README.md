@@ -11,5 +11,5 @@ A Flutter plugin for [Twilio Conversations SDK](https://www.twilio.com/docs/conv
 ## Usage
 ### install
 ```dart
-twilio_conversation_sdk: ^0.3.9
+twilio_conversation_sdk: ^0.4.1
 ```
